@@ -5,10 +5,6 @@ $(document).ready(function() {
   	// alert('読み込みました.');
   }
 
-  var getCalenderObj = function(){
-
-  }
-  
 
   var dayClass = [
 	{ className: 'fc-sun', dayText: 'Sun' },
@@ -22,17 +18,16 @@ $(document).ready(function() {
 
   // 現在日時を取得
 　var nowDate = new Date();
-  var nowDate = new Date(2015,1,29); // 指定日時テスト
   
   var nowYear = nowDate.getFullYear();
   var nowMonth = nowDate.getMonth();
   
-  var dispMonth = (nowMonth +1)+'月';
+  var dispMonth = nowYear + '年' + ' ' + (nowMonth +1)+'月';
   $('#calendar').before($('<h2>').text(dispMonth).addClass('text-center'));
  
 
-  // 月末の日にちを取得
-  var lastDate = new Date(nowYear, nowMonth+1, 0).getDate();
+  // 月末の日を取得
+  var lastDate = new Date(nowYear, nowMonth+1, 0);
 
   // カレンダーテーブルに要素を追加 
   // カレンダーヘッダー
@@ -49,101 +44,115 @@ $(document).ready(function() {
   );
 
  // カレンダーボディ
+
+ var targetDate = new Date(nowYear, nowMonth, 1);
+
  var html = '';
-  
-  for(var i=1; i<=(lastDate/7+1); i++ )
-  {
-    html += '<tr>';
-	
-	for(var j=0; j<=6; j++)
-	{
-	 html += '<td>'+'<div class="date-cell"></div><div class="content-cell"></div>' +'</td>';
-	
-	}
-        
-   html += '</tr>';
-     
-  } 
-  
-  $('#calendar TBODY').append(html);
-  
-  var rowNum = 0;
-  var num = 0; 
 
-  $('#calendar td').each(function(){
-	$(this).addClass(dayClass[num].className);
+ while(targetDate.getMonth() == lastDate.getMonth() &&
+	 targetDate.getDate() <= lastDate.getDate())
+ {
+	html += '<tr>';
+	var targetDay = 0;
 	
-	if(num == 0)
+ 	while(targetDay <= 6)
 	{
-	 $(this).parent().addClass('row'+ rowNum);
-	}
+		var dateClass = '"' + 
+				"date-cell" +
+				" " + dayClass[targetDay].className + 
+				'"';
 
-        if(num < 6){
-        	num++;
-	}
-	else{
-		num = 0;
-		rowNum++;
-	}
-      
-  });
-  
-  
-　// 日付部の表示
-  var targetDate = new Date(nowYear, nowMonth, 1);
-  $('#calendar td').each(function(){
-	
-	var dayNum = targetDate.getDay();
-	
-	if($(this).index() == dayNum)
-	{
-		var setClassName = targetDate.getFullYear() + '-' + (targetDate.getMonth()+1) + '-' + targetDate.getDate();
+		var setAtrName = '"' + 
+				 targetDate.getFullYear() + '-' + 
+				(targetDate.getMonth()+1) + '-' + 
+				targetDate.getDate() + '"';
 		
+		html += '<td>'+'<div class=' + dateClass + 'data-date=' + setAtrName + '>';
+		
+		var tmpDate = targetDate;
+		
+		// 日付部の設定
+		if(targetDate.getDay()== targetDay)
+		{
+			if(targetDate.getMonth() == nowMonth)
+			{
+				// 当月のみ設定
+				html += targetDate.getDate();
+			}
+			
+			// 末日でなければ日付を進める
+			targetDate.setDate( targetDate.getDate() + 1 );
+		}
+		
+		html += '</div>'
+
+		
+		// 予定部の設定
+		html += '<div class="content-cell">';
+		
+		html += '</div>'; 
+		
+		
+		html += '</td>';
+		
+				
+		// 曜日を進める
+		targetDay++;
+	}
+	
+	html += '</tr>';
+	
+	
+ }
+
+ // html要素をカレンダーに追加
+ $('#calendar TBODY').append(html);
+　
+
+ // メッセージ表示イベントを設定
+ $('.date-cell').each(function(){
+	
+	// 日付表示を右寄せ
+	$(this).addClass('text-right');
+	
+	$(this).on("click", function(ev){
+		
+		// clickした日付を取得
+		var showDate = new Date(Date.parse(ev.currentTarget.dataset.date));
 		
 		// message用に成形
-		var mesMonth = targetDate.getMonth()+1;
-		var mesDate = targetDate.getDate();
+		var mesMonth = showDate.getMonth()+1;
+		var mesDate = showDate.getDate();
+		var mesDay = showDate.getDay();
 		
-		if ((targetDate.getMonth()+1) < 10) {
-		  mesMonth = '0' + (targetDate.getMonth()+1);
+		if ((showDate.getMonth()+1) < 10) {
+		  mesMonth = '0' + (showDate.getMonth()+1);
 		}
-		if (targetDate.getDate() < 10) {
-		  mesDate = '0' + targetDate.getDate();
+		if (showDate.getDate() < 10) {
+		  mesDate = '0' + showDate.getDate();
 		}
 		
 		
 		var setMessage = '「' +
-				 targetDate.getFullYear() + '/' + 
+				 showDate.getFullYear() + '/' + 
 				 mesMonth + '/' +
 				 mesDate +
-				 '(' + dayClass[dayNum].dayText + ')'
+				 '(' + dayClass[mesDay].dayText + ')'
 				 + ' がクリックされました。」';
 		
-		//日付入力、日付クラス設定、日付イベント
-		$(this).children().eq(0)
-		.text(targetDate.getDate())
-		.addClass(setClassName)
-		.on("click", function(eo){
-				confirm(setMessage)
-				});
+		// messageの表示
+		confirm(setMessage);
 
-
-		
-		if(targetDate.getDate() != lastDate)
-		{
-			// 末日でなければ1日進める。
-			targetDate.setDate( targetDate.getDate() + 1 );
-		}
-	}
-
-  });
+	});
+ });
+ 
 
   // 本日を塗りつぶす
-  var nowDateStr = nowDate.getFullYear() + '-' + 
+  var nowDateStr = '"' + nowDate.getFullYear() + '-' + 
 		 (nowDate.getMonth()+1) + '-' + 
-		 nowDate.getDate();
+		 nowDate.getDate() + '"';
 
-  $('.' +nowDateStr).each(function(){
+  $('div[data-date=' + nowDateStr +']').each(function(){
 	$(this).parent().addClass('warning');
   });
 
@@ -155,14 +164,11 @@ $(document).ready(function() {
  $('.' +dayClass[0].className).each(function(){
 		$(this).addClass('text-danger');
   });
-
+  
 　// カレンダーを整える
   $('#calendar').css('table-layout', 'fixed');
 	
 
-
-
-  
 
 
   // ----- Initialize.
