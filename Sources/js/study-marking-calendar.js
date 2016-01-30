@@ -1,11 +1,6 @@
 
 $(document).ready(function() {
 
-  var showOnloadMessage = function() {
-  	// alert('読み込みました.');
-  }
-
-
   var dayClass = [
 	{ className: 'fc-sun', dayText: 'Sun' },
 	{ className: 'fc-mon', dayText: 'Mon' },
@@ -168,10 +163,4 @@ $(document).ready(function() {
 　// カレンダーを整える
   $('#calendar').css('table-layout', 'fixed');
 	
-
-
-
-  // ----- Initialize.
-
-  showOnloadMessage();
 });
