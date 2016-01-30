@@ -58,8 +58,8 @@ $(document).ready(function() {
  	while(targetDay <= 6)
 	{
 		var dateClass = '"' + 
-				"date-cell" +
-				" " + dayClass[targetDay].className + 
+				'date-cell' +
+				' ' + dayClass[targetDay].className + 
 				'"';
 
 		var setAtrName = '"' + 
@@ -115,7 +115,7 @@ $(document).ready(function() {
 	// 日付表示を右寄せ
 	$(this).addClass('text-right');
 	
-	$(this).on("click", function(ev){
+	$(this).on('click', function(ev){
 		
 		// clickした日付を取得
 		var showDate = new Date(Date.parse(ev.currentTarget.dataset.date));
