@@ -62,12 +62,14 @@ $(document).ready(function() {
 				" " + dayClass[targetDay].className + 
 				'"';
 
-		var setAtrName = '"' + 
-				 targetDate.getFullYear() + '-' + 
-				(targetDate.getMonth()+1) + '-' + 
-				targetDate.getDate() + '"';
+		//var setAtrName = '"' + 
+		//		 targetDate.getFullYear() + '-' + 
+		//		(targetDate.getMonth()+1) + '-' + 
+		//		targetDate.getDate() + '"';
 		
-		html += '<td>'+'<div class=' + dateClass + 'data-date=' + setAtrName + '>';
+		var setAtrName = targetDate.toDateString(); 
+
+		html += '<td>'+'<div class=' + dateClass + 'data-date=' + '"' + setAtrName + '"' + '>';
 		
 		var tmpDate = targetDate;
 		
@@ -115,7 +117,7 @@ $(document).ready(function() {
 	// 日付表示を右寄せ
 	$(this).addClass('text-right');
 	
-	$(this).on("click", function(ev){
+	$(this).on('click', function(ev){
 		
 		// clickした日付を取得
 		var showDate = new Date(Date.parse(ev.currentTarget.dataset.date));
@@ -148,11 +150,9 @@ $(document).ready(function() {
  
 
   // 本日を塗りつぶす
-  var nowDateStr = '"' + nowDate.getFullYear() + '-' + 
-		 (nowDate.getMonth()+1) + '-' + 
-		 nowDate.getDate() + '"';
+  var nowDateStr = nowDate.toDateString();
 
-  $('div[data-date=' + nowDateStr +']').each(function(){
+  $('div[data-date=' + '"' + nowDateStr + '"' +']').each(function(){
 	$(this).parent().addClass('warning');
   });
 
