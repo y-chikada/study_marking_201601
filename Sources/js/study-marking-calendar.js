@@ -5,16 +5,69 @@ $(document).ready(function() {
   	// alert('読み込みました.');
   }
 
+  // 定数
+  const JAPANESE_MODE = 'Japanese'; //日本語モード
+  const ENGLISH_MODE = 'English'; //英語モード
+  
+  // 月の英語表現
+  const EN_MONTH_ARRAY = new Array(
+									'Jan',
+									'Feb',
+									'Mar',
+									'Apr',
+									'May',
+									'Jun',
+									'Jul',
+									'Aug',
+									'Sep',
+									'Oct',
+									'Nov',
+									'Dec'
+									);
+  // 日付部クリック時メッセージ
+  const JA_DATE_CLICK_MES = 'がクリックされました。'; // 日本語
+  const EN_DATE_CLICK_MES = 'was on clicked.'; // 英語
 
-  var dayClass = [
-	{ className: 'fc-sun', dayText: 'Sun' },
-	{ className: 'fc-mon', dayText: 'Mon' },
-	{ className: 'fc-tue', dayText: 'Tue' },
-	{ className: 'fc-wed', dayText: 'Wed' },
-	{ className: 'fc-thu', dayText: 'Thu' },
-	{ className: 'fc-fri', dayText: 'Fri' },
-	{ className: 'fc-sat', dayText: 'Sat'}
-  ];
+
+  // 言語設定
+  var dayLang = ENGLISH_MODE; // 曜日表示言語
+  var monthLang = ENGLISH_MODE; // 年月表示言語
+  var clickMesLang = ENGLISH_MODE; // 日付クリックメッセ―ジ言語
+
+  // 曜日表示の設定
+  var dayClass = [];
+  
+  switch(dayLang)
+  {
+  	case JAPANESE_MODE:
+	// 日本語
+	
+	dayClass = [
+			{ className: 'fc-sun', dayText: '日' },
+			{ className: 'fc-mon', dayText: '月' },
+			{ className: 'fc-tue', dayText: '火' },
+			{ className: 'fc-wed', dayText: '水' },
+			{ className: 'fc-thu', dayText: '木' },
+			{ className: 'fc-fri', dayText: '金' },
+			{ className: 'fc-sat', dayText: '土'}
+		];
+		break;
+	
+	case ENGLISH_MODE:
+	// 英語
+
+		dayClass = [
+			{ className: 'fc-sun', dayText: 'Sun' },
+			{ className: 'fc-mon', dayText: 'Mon' },
+			{ className: 'fc-tue', dayText: 'Tue' },
+			{ className: 'fc-wed', dayText: 'Wed' },
+			{ className: 'fc-thu', dayText: 'Thu' },
+			{ className: 'fc-fri', dayText: 'Fri' },
+			{ className: 'fc-sat', dayText: 'Sat'}
+		];
+		break;
+	
+  }
 
   // 現在日時を取得
 　var nowDate = new Date();
@@ -22,10 +75,25 @@ $(document).ready(function() {
   var nowYear = nowDate.getFullYear();
   var nowMonth = nowDate.getMonth();
   
-  var dispMonth = nowYear + '年' + ' ' + (nowMonth +1)+'月';
-  $('#calendar').before($('<h2>').text(dispMonth).addClass('text-center'));
- 
+  var dispMonth = '';
+  
+  // 選択言語によって年月表記を変更
+  switch(monthLang)
+  {
+  	case JAPANESE_MODE:
+	// 日本語
+		dispMonth = nowYear + '年' + ' ' + (nowMonth +1)+'月';
+		break;
 
+	case ENGLISH_MODE:
+	// 英語
+		dispMonth = nowYear + ' ' + EN_MONTH_ARRAY[nowMonth];
+		break;
+  }
+
+  // 年月表示要素をカレンダー上部に追加
+  $('#calendar').before($('<h2>').text(dispMonth).addClass('text-center'));
+	
   // 月末の日を取得
   var lastDate = new Date(nowYear, nowMonth+1, 0);
 
@@ -132,13 +200,32 @@ $(document).ready(function() {
 		  mesDate = '0' + showDate.getDate();
 		}
 		
+		// 選択言語によってメッセージを変更
+		var setMessage = '';
 		
-		var setMessage = '「' +
-				 showDate.getFullYear() + '/' + 
-				 mesMonth + '/' +
-				 mesDate +
-				 '(' + dayClass[mesDay].dayText + ')'
-				 + ' がクリックされました。」';
+		switch(clickMesLang)
+		{
+			case ENGLISH_MODE:
+			// 英語
+				setMessage = '「' +
+						 showDate.getFullYear() + '/' + 
+						 mesMonth + '/' +
+						 mesDate +
+						 '(' + dayClass[mesDay].dayText + ')'
+						 + EN_DATE_CLICK_MES + '」';
+				break;
+			
+			case JAPANESE_MODE:
+			// 日本語
+				setMessage = '「' +
+						 showDate.getFullYear() + '/' + 
+						 mesMonth + '/' +
+						 mesDate +
+						 '(' + dayClass[mesDay].dayText + ')'
+						 + JA_DATE_CLICK_MES + '」';
+				break;
+		
+		}
 		
 		// messageの表示
 		confirm(setMessage);
