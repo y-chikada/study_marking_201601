@@ -6,6 +6,7 @@ $(document).ready(function() {
   }
 
 
+  // 曜日class-表示名 配列
   var dayClass = [
 	{ className: 'fc-sun', dayText: 'Sun' },
 	{ className: 'fc-mon', dayText: 'Mon' },
@@ -30,7 +31,7 @@ $(document).ready(function() {
   var lastDate = new Date(nowYear, nowMonth+1, 0);
 
   // カレンダーテーブルに要素を追加 
-  // カレンダーヘッダー
+  // カレンダーヘッダー（曜日ヘッダー）
   $('#calendar THEAD').append(
     $('<tr>').append(
       $('<th>').addClass(dayClass[0].className).text(dayClass[0].dayText),
@@ -44,17 +45,19 @@ $(document).ready(function() {
   );
 
  // カレンダーボディ
-
+ // 日付部を構成するhtml要素を作成する
  var targetDate = new Date(nowYear, nowMonth, 1);
 
  var html = '';
 
+ // 月の最終日まで繰り返し
  while(targetDate.getMonth() == lastDate.getMonth() &&
 	 targetDate.getDate() <= lastDate.getDate())
  {
 	html += '<tr>';
 	var targetDay = 0;
 	
+    // 1週間単位で繰り返し
  	while(targetDay <= 6)
 	{
 		var dateClass = '"' + 
@@ -105,11 +108,11 @@ $(document).ready(function() {
 	
  }
 
- // html要素をカレンダーに追加
+ // 作成したhtml要素をカレンダーボディに追加
  $('#calendar TBODY').append(html);
 　
 
- // メッセージ表示イベントを設定
+ // メッセージ表示イベントを各日付部に設定
  $('.date-cell').each(function(){
 	
 	// 日付表示を右寄せ
