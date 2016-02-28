@@ -117,6 +117,9 @@ $(document).ready(function() {
 	// 日付表示を右寄せ
 	$(this).addClass('text-right');
 	
+	// 日付部にカーソルを合わせたとき、指マークが表示されるようにする。
+	$(this).css('cursor', 'pointer');	
+	
 	$(this).on('click', function(ev){
 		
 		// clickした日付を取得
@@ -165,9 +168,8 @@ $(document).ready(function() {
 		$(this).addClass('text-danger');
   });
   
-　// カレンダーを整える
+  // カレンダーを整える
   $('#calendar').css('table-layout', 'fixed');
-	
 
 
 
