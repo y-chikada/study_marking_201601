@@ -1,26 +1,136 @@
-$(document).ready(function() {
+ // 定数
+ const JAPANESE_MODE = 'Japanese'; //日本語モード
+ const ENGLISH_MODE = 'English'; //英語モード
+
+ // 月の英語表現
+ const EN_MONTH_ARRAY = new Array(
+     'Jan',
+     'Feb',
+     'Mar',
+     'Apr',
+     'May',
+     'Jun',
+     'Jul',
+     'Aug',
+     'Sep',
+     'Oct',
+     'Nov',
+     'Dec'
+ );
+ // 日付部クリック時メッセージ
+ const JA_DATE_CLICK_MES = 'がクリックされました。'; // 日本語
+ const EN_DATE_CLICK_MES = 'was on clicked.'; // 英語
 
     var showOnloadMessage = function() {
         // alert('読み込みました.');
     }
 
+ // 曜日表示の設定
+ var dayClass = [];
+ // 年月表示
+ var dispMonth = '';
+ // クリック時メッセージ
+ var clickMessage = '';
 
-  // 曜日class-表示名 配列
-  var dayClass = [
-	{ className: 'fc-sun', dayText: 'Sun' },
-	{ className: 'fc-mon', dayText: 'Mon' },
-	{ className: 'fc-tue', dayText: 'Tue' },
-	{ className: 'fc-wed', dayText: 'Wed' },
-	{ className: 'fc-thu', dayText: 'Thu' },
-	{ className: 'fc-fri', dayText: 'Fri' },
-	{ className: 'fc-sat', dayText: 'Sat'}
-  ];
 
-    // 現在日時を取得
-    var nowDate = new Date();
 
-    var nowYear = nowDate.getFullYear();
-    var nowMonth = nowDate.getMonth();
+ // 言語設定
+ function setLangMode(langMode, targetDate) {
+     var nowYear = targetDate.getFullYear();
+     var nowMonth = targetDate.getMonth();
+
+     switch (langMode) {
+         case JAPANESE_MODE:
+             // 日本語
+             // 曜日設定
+             dayClass = [{
+                 className: 'fc-sun',
+                 dayText: '日'
+             }, {
+                 className: 'fc-mon',
+                 dayText: '月'
+             }, {
+                 className: 'fc-tue',
+                 dayText: '火'
+             }, {
+                 className: 'fc-wed',
+                 dayText: '水'
+             }, {
+                 className: 'fc-thu',
+                 dayText: '木'
+             }, {
+                 className: 'fc-fri',
+                 dayText: '金'
+             }, {
+                 className: 'fc-sat',
+                 dayText: '土'
+             }];
+
+             // 年月表示
+             dispMonth = nowYear + '年' + ' ' + (nowMonth + 1) + '月';
+
+             // クリック時メッセージ
+             clickMessage = JA_DATE_CLICK_MES;
+
+             break;
+
+         case ENGLISH_MODE:
+             // 英語
+
+             // 曜日設定
+             dayClass = [{
+                 className: 'fc-sun',
+                 dayText: 'Sun'
+             }, {
+                 className: 'fc-mon',
+                 dayText: 'Mon'
+             }, {
+                 className: 'fc-tue',
+                 dayText: 'Tue'
+             }, {
+                 className: 'fc-wed',
+                 dayText: 'Wed'
+             }, {
+                 className: 'fc-thu',
+                 dayText: 'Thu'
+             }, {
+                 className: 'fc-fri',
+                 dayText: 'Fri'
+             }, {
+                 className: 'fc-sat',
+                 dayText: 'Sat'
+             }];
+
+             // 年月設定
+             dispMonth = nowYear + ' ' + EN_MONTH_ARRAY[nowMonth];
+
+             // クリック時メッセージ
+             clickMessage = EN_DATE_CLICK_MES;
+
+             break;
+     }
+ }
+
+
+
+ $(document).ready(function() {
+
+     var showOnloadMessage = function() {
+         // alert('読み込みました.');
+     }
+
+     // 言語設定
+     var langMode = JAPANESE_MODE; // 曜日表示言語
+
+
+     // 現在日時を取得
+     var nowDate = new Date();
+
+     var nowYear = nowDate.getFullYear();
+     var nowMonth = nowDate.getMonth();
+
+     //言語毎の設定
+     setLangMode(langMode, nowDate);
   // カレンダーテーブルに要素を追加 
   // カレンダーヘッダー（曜日ヘッダー）
   $('#calendar THEAD').append($('<TR>'));
@@ -29,8 +139,8 @@ $(document).ready(function() {
       $('<TH>').addClass(this.className).text(this.dayText)
     );
   });
-    var dispMonth = nowYear + '年' + ' ' + (nowMonth + 1) + '月';
-    $('#calendar').before($('<h2>').text(dispMonth).addClass('text-center'));
+     // 年月表示要素をカレンダー上部に追加
+     $('#calendar').before($('<h2>').text(dispMonth).addClass('text-center'));
 
     // 月末の日を取得
     var lastDate = new Date(nowYear, nowMonth + 1, 0);
@@ -52,7 +162,6 @@ $(document).ready(function() {
 				'date-cell' +
 				' ' + dayClass[targetDay].className + 
 				'"';
-
 
 		//var setAtrName = '"' + 
 		//		 targetDate.getFullYear() + '-' + 
@@ -79,6 +188,7 @@ $(document).ready(function() {
 		}
 		
 		html += '</div>'
+
 		// 予定部の設定
 		html += '<div class="content-cell">';
 		
@@ -94,15 +204,10 @@ $(document).ready(function() {
 	
 	html += '</tr>';
 	
-	
- }
+}
 
- // html要素をカレンダーに追加
- $('#calendar TBODY').append(html);
-　
-
-
-
+     // html要素をカレンダーに追加
+     $('#calendar TBODY').append(html);　
 
  // メッセージ表示イベントを設定
  $('.date-cell').each(function(){
@@ -130,30 +235,27 @@ $(document).ready(function() {
 		  mesDate = '0' + showDate.getDate();
 		}
 		
-		
-		var setMessage = '「' +
-				 showDate.getFullYear() + '/' + 
-				 mesMonth + '/' +
-				 mesDate +
-				 '(' + dayClass[mesDay].dayText + ')'
-				 + ' がクリックされました。」';
-		
+		// 選択言語によってメッセージを変更
+        var setMessage = '「' +
+            showDate.getFullYear() + '/' +
+            mesMonth + '/' +
+            mesDate +
+            '(' + dayClass[mesDay].dayText + ')' + clickMessage + '」';
+
 		// messageの表示
-		confirm(setMessage);
-
-	});
+		confirm(setMessage);	
+    });
  });
-
-
   // 本日を塗りつぶす
-  var nowDateStr = nowDate.toDateString();
-
+  var nowDateStr = nowDate.toDateString();  
   $('div[data-date=' + '"' + nowDateStr + '"' +']').each(function(){
 	$(this).parent().addClass('warning');
   });
 
-
-
+  // 土日の色を変える
+  $('.' +dayClass[6].className).each(function(){
+		$(this).addClass('text-info');
+  });
  $('.' +dayClass[0].className).each(function(){
 		$(this).addClass('text-danger');
   });
@@ -161,10 +263,6 @@ $(document).ready(function() {
   // カレンダーを整える
   $('#calendar').css('table-layout', 'fixed');
 
-
-
-  // ----- Initialize.
-
+  // ----- Initialize.  
   showOnloadMessage();
 });
-
