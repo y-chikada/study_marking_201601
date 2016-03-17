@@ -168,9 +168,3 @@ $(document).ready(function() {
   showOnloadMessage();
 });
 
-
-
-    // ----- Initialize.
-
-    showOnloadMessage();
-});
