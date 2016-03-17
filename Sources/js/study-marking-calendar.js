@@ -50,18 +50,18 @@ $(document).ready(function() {
 
   var html = '';
     // カレンダーボディ
-  while (targetDate.getMonth() == lastDate.getMonth() &&
-    targetDate.getDate() <= lastDate.getDate())
-  {
-    html += '<tr>';
-    var targetDay = 0;
-
-    while(targetDay <= 6) {
-      var dateClass = '"' + 
-          "date-cell" +
-          " " + dayClass[targetDay].className + 
-          '"';
-
+ while(targetDate.getMonth() == lastDate.getMonth() &&
+	 targetDate.getDate() <= lastDate.getDate())
+ {
+	html += '<tr>';
+	var targetDay = 0;
+	
+ 	while(targetDay <= 6)
+	{
+		var dateClass = '"' + 
+				'date-cell' +
+				' ' + dayClass[targetDay].className + 
+				'"';
       var setAtrName = '"' + 
            targetDate.getFullYear() + '-' + 
           (targetDate.getMonth()+1) + '-' + 
