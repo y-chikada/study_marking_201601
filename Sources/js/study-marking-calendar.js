@@ -5,28 +5,16 @@ $(document).ready(function() {
     }
 
 
-    var dayClass = [{
-        className: 'fc-sun',
-        dayText: 'Sun'
-    }, {
-        className: 'fc-mon',
-        dayText: 'Mon'
-    }, {
-        className: 'fc-tue',
-        dayText: 'Tue'
-    }, {
-        className: 'fc-wed',
-        dayText: 'Wed'
-    }, {
-        className: 'fc-thu',
-        dayText: 'Thu'
-    }, {
-        className: 'fc-fri',
-        dayText: 'Fri'
-    }, {
-        className: 'fc-sat',
-        dayText: 'Sat'
-    }];
+  // 曜日class-表示名 配列
+  var dayClass = [
+	{ className: 'fc-sun', dayText: 'Sun' },
+	{ className: 'fc-mon', dayText: 'Mon' },
+	{ className: 'fc-tue', dayText: 'Tue' },
+	{ className: 'fc-wed', dayText: 'Wed' },
+	{ className: 'fc-thu', dayText: 'Thu' },
+	{ className: 'fc-fri', dayText: 'Fri' },
+	{ className: 'fc-sat', dayText: 'Sat'}
+  ];
 
     // 現在日時を取得
     var nowDate = new Date();
@@ -34,7 +22,7 @@ $(document).ready(function() {
     var nowYear = nowDate.getFullYear();
     var nowMonth = nowDate.getMonth();
   // カレンダーテーブルに要素を追加 
-  // カレンダーヘッダー
+  // カレンダーヘッダー（曜日ヘッダー）
   $('#calendar THEAD').append($('<TR>'));
   $(dayClass).each(function() {
     $('#calendar THEAD TR').append(
@@ -47,15 +35,17 @@ $(document).ready(function() {
     // 月末の日を取得
     var lastDate = new Date(nowYear, nowMonth + 1, 0);
   var targetDate = new Date(nowYear, nowMonth, 1);
-
+ // 日付部を構成するhtml要素を作成する
   var html = '';
     // カレンダーボディ
+ // 月の最終日まで繰り返し
  while(targetDate.getMonth() == lastDate.getMonth() &&
 	 targetDate.getDate() <= lastDate.getDate())
  {
 	html += '<tr>';
 	var targetDay = 0;
 	
+    // 1週間単位で繰り返し
  	while(targetDay <= 6)
 	{
 		var dateClass = '"' + 
