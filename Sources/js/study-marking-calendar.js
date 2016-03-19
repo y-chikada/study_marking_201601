@@ -21,10 +21,6 @@
  const JA_DATE_CLICK_MES = 'がクリックされました。'; // 日本語
  const EN_DATE_CLICK_MES = 'was on clicked.'; // 英語
 
-    var showOnloadMessage = function() {
-        // alert('読み込みました.');
-    }
-
  // 曜日表示の設定
  var dayClass = [];
  // 年月表示
@@ -262,7 +258,4 @@
   
   // カレンダーを整える
   $('#calendar').css('table-layout', 'fixed');
-
-  // ----- Initialize.  
-  showOnloadMessage();
 });
