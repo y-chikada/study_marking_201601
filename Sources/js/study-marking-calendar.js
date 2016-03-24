@@ -111,10 +111,6 @@
 
  $(document).ready(function() {
 
-     var showOnloadMessage = function() {
-         // alert('読み込みました.');
-     }
-
      // 言語設定
      var langMode = JAPANESE_MODE; // 曜日表示言語
 
@@ -156,11 +152,6 @@
                  'date-cell' +
                  ' ' + dayClass[targetDay].className +
                  '"';
-
-             //var setAtrName = '"' + 
-             //		 targetDate.getFullYear() + '-' + 
-             //		(targetDate.getMonth()+1) + '-' + 
-             //		targetDate.getDate() + '"';
 
              var setAtrName = targetDate.toDateString();
 
